@@ -1,6 +1,6 @@
 terraform {
   backend "local" {
-    path = "switch-state.dev.tfstate"
+    path = "state-switch.prd.tfstate"
   }
 }
 
@@ -9,11 +9,17 @@ locals {
   zip_filepath = "/functions/state-switch-lambda/deploy.zip"
 }
 
+data "terraform_remote_state" "iam" {
+  backend = "local"
+  config = {
+    path = "../iam/iam.prd.tfstate"
+  }
+}
 
 
 resource "aws_lambda_function" "switch_state_function" {
   function_name = format("%s-state-switch", local.project_name)
-  role          = var.lambda_role_arn
+  role          = data.terraform_remote_state.iam.outputs.lambda_role_arn
 
   filename         = local.zip_filepath
 

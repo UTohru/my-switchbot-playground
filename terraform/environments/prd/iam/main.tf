@@ -1,11 +1,18 @@
 terraform {
   backend "local" {
-    path = "iam.dev.tfstate"
+    path = "iam.prd.tfstate"
   }
 }
 
 locals {
   project_name = "switchbot-api"
+}
+
+data "terraform_remote_state" "platform" {
+  backend = "local"
+  config = {
+    path = "../platform/platform.prd.tfstate"
+  }
 }
 
 resource "aws_iam_role" "lambda_role" {
@@ -37,7 +44,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
           "dynamodb:PutItem",
           "dynamodb:UpdateItem"
         ],
-        Resource: var.dynamodb_arns
+        Resource: data.terraform_remote_state.platform.outputs.dynamodb_arn
       },
       {
          Effect: "Allow",

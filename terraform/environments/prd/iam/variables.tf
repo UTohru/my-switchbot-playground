@@ -5,7 +5,3 @@ variable "AWS_ACCOUNT_ID" {
 variable "AWS_DEFAULT_REGION" {
   type        = string
 }
-
-variable "dynamodb_arns" {
-  type        = list(string)
-}

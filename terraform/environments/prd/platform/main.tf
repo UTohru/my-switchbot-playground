@@ -1,6 +1,6 @@
 terraform {
   backend "local" {
-    path = "iam.dev.tfstate"
+    path = "platform.prd.tfstate"
   }
 }
 
