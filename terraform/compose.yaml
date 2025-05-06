@@ -1,0 +1,13 @@
+services:
+  terraform:
+    build:
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/workspace
+      - ../functions:/functions
+      # - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /workspace
+    # environment:
+    #   - DOCKER_DEFAULT_IPV6=0
+    env_file:
+      - .env
